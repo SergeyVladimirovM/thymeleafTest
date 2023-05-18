@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xlink">
+<link rel="stylesheet" th:href="@{/styles/style.css}">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Products</title>
 </head>
 <body>
-$END$
+<h2>Products</h2>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Price</th>
+    </tr>
+    <tr th:each="product: ${productPages}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.title}"></td>
+        <td th:text="${product.price}"></td>
+        <td>
+            <form action="#" th:action="@{'/app/products/delete/{id}'(id=${product.id})}" th:method="delete">
+            <button type="submit">
+                Delete
+            </button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<div th:if="${productPages.totalPages > 0}" class="pagination"
+     th:each="pageNumber : ${pageNumbers}">
+    <a th:href="@{/app/products/(size=${productPages.size}, page=${pageNumber})}"
+       th:text="${pageNumber}"
+       th:class="${pageNumber==productPages.number + 1} ? active"></a>
+</div>
+
+<form action="http://localhost:8080/app/products/add">
+    <button type="submit">
+        Add Product
+    </button>
+</form>
+
 </body>
 </html>
